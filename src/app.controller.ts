@@ -14,6 +14,9 @@ export class AppController {
     private readonly appService: AppService,
   ) {}
 
+  async onApplicationBootstrap() {
+    await this.client.connect();
+  }
   @Get()
   getHello(): string {
     this.client.emit('cmd', { data: [1, 2, 3] });
@@ -22,6 +25,7 @@ export class AppController {
 
   @Post(':id')
   async sendSome(@Param('id') id: string) {
-    this.client.emit('get-param', parseInt(id));
+    this.client.send('get-param', parseInt(id)).subscribe();
+    return 'hi';
   }
 }
